@@ -6,9 +6,7 @@ from sklearn.model_selection import train_test_split
 def split_dataset(filepath='./tweet_data/Tweets.csv'):
     df = pd.read_csv(filepath)
     texts = df['text'].tolist()
-    texts = texts[:100]
     labels = pd.factorize(df['airline_sentiment'])[0].tolist()
-    labels = labels[:100]
 
     train_end = int(len(texts) * 0.8)
     val_end = int(len(texts) * 0.9)

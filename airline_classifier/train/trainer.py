@@ -28,18 +28,18 @@ class Trainer:
             loss = self.criterion(output, labels)
             loss.backward()
             self.optimizer.step()
-            count+=1
+            count += 1
 
     def evaluate(self, test_loader):
         self.model.eval()
         test_loss = 0
         correct = 0
         with torch.no_grad():
-            for input_ids, attention_mask, labels  in test_loader:
+            for input_ids, attention_mask, labels in test_loader:
                 input_ids = input_ids.to(self.device)
                 attention_mask = attention_mask.to(self.device)
                 labels = labels.to(self.device)
-                output = self.model(input_ids.squeeze(1),attention_mask.squeeze(1))
+                output = self.model(input_ids.squeeze(1), attention_mask.squeeze(1))
                 test_loss += self.criterion(output, labels).item()
                 pred = output.argmax(dim=1, keepdim=True)
                 correct += pred.eq(labels.view_as(pred)).sum().item()
@@ -52,9 +52,9 @@ class Trainer:
         return self.evaluate(validation_loader)
 
     def fit(self, train_dataset, validation_dataset, test_dataset, num_epochs=5):
-        train_loader = DataLoader(train_dataset, batch_size=4)
-        validation_loader = DataLoader(validation_dataset, batch_size=2)
-        test_loader = DataLoader(test_dataset,batch_size=2)
+        train_loader = DataLoader(train_dataset, batch_size=32)
+        validation_loader = DataLoader(validation_dataset, batch_size=32)
+        test_loader = DataLoader(test_dataset, batch_size=32)
         for epoch in range(num_epochs):
             self.train(train_loader)
             val_loss, val_acc = self.validate(validation_loader)
